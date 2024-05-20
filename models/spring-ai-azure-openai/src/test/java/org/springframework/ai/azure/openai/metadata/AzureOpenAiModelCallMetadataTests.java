@@ -23,7 +23,7 @@ import com.azure.ai.openai.models.ContentFilterResultsForChoice;
 import com.azure.ai.openai.models.ContentFilterSeverity;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.ai.azure.openai.AzureOpenAiModelCall;
+import org.springframework.ai.azure.openai.AzureOpenAiModelCaller;
 import org.springframework.ai.azure.openai.MockAzureOpenAiTestConfiguration;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.Generation;
@@ -55,7 +55,7 @@ import org.springframework.web.context.request.WebRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit Tests for {@link AzureOpenAiModelCall} asserting AI metadata.
+ * Unit Tests for {@link AzureOpenAiModelCaller} asserting AI metadata.
  *
  * @author John Blum
  * @author Christian Tzolov
@@ -68,7 +68,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AzureOpenAiModelCallMetadataTests {
 
 	@Autowired
-	private AzureOpenAiModelCall aiClient;
+	private AzureOpenAiModelCaller aiClient;
 
 	@Test
 	void azureOpenAiMetadataCapturedDuringGeneration() {

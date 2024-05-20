@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.springframework.ai.anthropic.AnthropicModelCall;
+import org.springframework.ai.anthropic.AnthropicModelCaller;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.autoconfigure.retry.SpringAiRetryAutoConfiguration;
@@ -50,7 +50,7 @@ public class AnthropicAutoConfigurationIT {
 	@Test
 	void generate() {
 		contextRunner.run(context -> {
-			AnthropicModelCall chatClient = context.getBean(AnthropicModelCall.class);
+			AnthropicModelCaller chatClient = context.getBean(AnthropicModelCaller.class);
 			String response = chatClient.call("Hello");
 			assertThat(response).isNotEmpty();
 			logger.info("Response: " + response);
@@ -60,7 +60,7 @@ public class AnthropicAutoConfigurationIT {
 	@Test
 	void generateStreaming() {
 		contextRunner.run(context -> {
-			AnthropicModelCall chatClient = context.getBean(AnthropicModelCall.class);
+			AnthropicModelCaller chatClient = context.getBean(AnthropicModelCaller.class);
 			Flux<ChatResponse> responseFlux = chatClient.stream(new Prompt(new UserMessage("Hello")));
 
 			String response = responseFlux.collectList()

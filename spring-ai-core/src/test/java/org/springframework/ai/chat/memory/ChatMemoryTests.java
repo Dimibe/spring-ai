@@ -25,7 +25,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.ai.chat.ModelCall;
+import org.springframework.ai.chat.ChatCaller;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.Generation;
 import org.springframework.ai.chat.StreamingChatClient;
@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 public class ChatMemoryTests {
 
 	@Mock
-	ModelCall modelCall;
+	ChatCaller modelCall;
 
 	@Mock
 	StreamingChatClient streamingChatClient;

@@ -28,7 +28,7 @@ import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCall;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCaller;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatOptions;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -56,11 +56,11 @@ class FunctionCallWithFunctionBeanIT {
 
 		contextRunner.withPropertyValues("spring.ai.vertex.ai.gemini.chat.options.model="
 				// + VertexAiGeminiModelCall.ChatModel.GEMINI_PRO.getValue())
-				+ VertexAiGeminiModelCall.ChatModel.GEMINI_PRO_1_5_PRO.getValue())
+				+ VertexAiGeminiModelCaller.ChatModel.GEMINI_PRO_1_5_PRO.getValue())
 			// + VertexAiGeminiModelCall.ChatModel.GEMINI_PRO_1_5_FLASH.getValue())
 			.run(context -> {
 
-				VertexAiGeminiModelCall chatClient = context.getBean(VertexAiGeminiModelCall.class);
+				VertexAiGeminiModelCaller chatClient = context.getBean(VertexAiGeminiModelCaller.class);
 
 				var systemMessage = new SystemMessage("""
 						Use Multi-turn function calling.

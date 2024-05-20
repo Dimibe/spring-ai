@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration;
@@ -60,7 +60,7 @@ class FunctionCallbackWithPlainFunctionBeanIT {
 	void functionCallTest() {
 		contextRunner.withPropertyValues("spring.ai.openai.chat.options.model=gpt-4-turbo-preview").run(context -> {
 
-			OpenAiModelCall chatClient = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller chatClient = context.getBean(OpenAiModelCaller.class);
 
 			// Test weatherFunction
 			UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
@@ -87,7 +87,7 @@ class FunctionCallbackWithPlainFunctionBeanIT {
 	void functionCallWithPortableFunctionCallingOptions() {
 		contextRunner.withPropertyValues("spring.ai.openai.chat.options.model=gpt-4-turbo-preview").run(context -> {
 
-			OpenAiModelCall chatClient = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller chatClient = context.getBean(OpenAiModelCaller.class);
 
 			// Test weatherFunction
 			UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
@@ -106,7 +106,7 @@ class FunctionCallbackWithPlainFunctionBeanIT {
 	void streamFunctionCallTest() {
 		contextRunner.withPropertyValues("spring.ai.openai.chat.options.model=gpt-4-turbo-preview").run(context -> {
 
-			OpenAiModelCall chatClient = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller chatClient = context.getBean(OpenAiModelCaller.class);
 
 			// Test weatherFunction
 			UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");

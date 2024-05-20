@@ -15,7 +15,7 @@
  */
 package org.springframework.ai.autoconfigure.huggingface;
 
-import org.springframework.ai.huggingface.HuggingfaceModelCall;
+import org.springframework.ai.huggingface.HuggingfaceModelCaller;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
-@ConditionalOnClass(HuggingfaceModelCall.class)
+@ConditionalOnClass(HuggingfaceModelCaller.class)
 @EnableConfigurationProperties(HuggingfaceChatProperties.class)
 public class HuggingfaceChatAutoConfiguration {
 
@@ -32,8 +32,8 @@ public class HuggingfaceChatAutoConfiguration {
 	@ConditionalOnMissingBean
 	@ConditionalOnProperty(prefix = HuggingfaceChatProperties.CONFIG_PREFIX, name = "enabled", havingValue = "true",
 			matchIfMissing = true)
-	public HuggingfaceModelCall huggingfaceChatClient(HuggingfaceChatProperties huggingfaceChatProperties) {
-		return new HuggingfaceModelCall(huggingfaceChatProperties.getApiKey(), huggingfaceChatProperties.getUrl());
+	public HuggingfaceModelCaller huggingfaceChatClient(HuggingfaceChatProperties huggingfaceChatProperties) {
+		return new HuggingfaceModelCaller(huggingfaceChatProperties.getApiKey(), huggingfaceChatProperties.getUrl());
 	}
 
 }

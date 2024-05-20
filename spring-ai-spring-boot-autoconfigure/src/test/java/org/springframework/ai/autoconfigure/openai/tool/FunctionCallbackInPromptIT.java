@@ -32,7 +32,7 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration;
@@ -54,7 +54,7 @@ public class FunctionCallbackInPromptIT {
 	void functionCallTest() {
 		contextRunner.withPropertyValues("spring.ai.openai.chat.options.model=gpt-4-turbo-preview").run(context -> {
 
-			OpenAiModelCall chatClient = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller chatClient = context.getBean(OpenAiModelCaller.class);
 
 			UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
 
@@ -79,7 +79,7 @@ public class FunctionCallbackInPromptIT {
 
 		contextRunner.withPropertyValues("spring.ai.openai.chat.options.model=gpt-4-turbo-preview").run(context -> {
 
-			OpenAiModelCall chatClient = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller chatClient = context.getBean(OpenAiModelCaller.class);
 
 			UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
 

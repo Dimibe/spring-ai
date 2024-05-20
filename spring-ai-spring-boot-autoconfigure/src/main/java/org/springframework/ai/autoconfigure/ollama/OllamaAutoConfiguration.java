@@ -15,7 +15,7 @@
  */
 package org.springframework.ai.autoconfigure.ollama;
 
-import org.springframework.ai.ollama.OllamaModelCall;
+import org.springframework.ai.ollama.OllamaModelCaller;
 import org.springframework.ai.ollama.OllamaEmbeddingClient;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -56,8 +56,8 @@ public class OllamaAutoConfiguration {
 	@ConditionalOnMissingBean
 	@ConditionalOnProperty(prefix = OllamaChatProperties.CONFIG_PREFIX, name = "enabled", havingValue = "true",
 			matchIfMissing = true)
-	public OllamaModelCall ollamaChatClient(OllamaApi ollamaApi, OllamaChatProperties properties) {
-		return new OllamaModelCall(ollamaApi, properties.getOptions());
+	public OllamaModelCaller ollamaChatClient(OllamaApi ollamaApi, OllamaChatProperties properties) {
+		return new OllamaModelCaller(ollamaApi, properties.getOptions());
 	}
 
 	@Bean

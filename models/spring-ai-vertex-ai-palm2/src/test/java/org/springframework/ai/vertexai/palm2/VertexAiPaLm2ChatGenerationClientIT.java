@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class VertexAiPaLm2ChatGenerationClientIT {
 
 	@Autowired
-	private VertexAiPaLm2ModelCall client;
+	private VertexAiPaLm2ModelCaller client;
 
 	@Value("classpath:/prompts/system-message.st")
 	private Resource systemResource;
@@ -136,8 +136,8 @@ class VertexAiPaLm2ChatGenerationClientIT {
 		}
 
 		@Bean
-		public VertexAiPaLm2ModelCall vertexAiEmbedding(VertexAiPaLm2Api vertexAiApi) {
-			return new VertexAiPaLm2ModelCall(vertexAiApi);
+		public VertexAiPaLm2ModelCaller vertexAiEmbedding(VertexAiPaLm2Api vertexAiApi) {
+			return new VertexAiPaLm2ModelCaller(vertexAiApi);
 		}
 
 	}

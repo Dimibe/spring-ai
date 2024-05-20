@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCall;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCaller;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.chat.ChatResponse;
@@ -46,7 +46,7 @@ public class VertexAiGeminiAutoConfigurationIT {
 	@Test
 	void generate() {
 		contextRunner.run(context -> {
-			VertexAiGeminiModelCall client = context.getBean(VertexAiGeminiModelCall.class);
+			VertexAiGeminiModelCaller client = context.getBean(VertexAiGeminiModelCaller.class);
 			String response = client.call("Hello");
 			assertThat(response).isNotEmpty();
 			logger.info("Response: " + response);
@@ -56,7 +56,7 @@ public class VertexAiGeminiAutoConfigurationIT {
 	@Test
 	void generateStreaming() {
 		contextRunner.run(context -> {
-			VertexAiGeminiModelCall client = context.getBean(VertexAiGeminiModelCall.class);
+			VertexAiGeminiModelCaller client = context.getBean(VertexAiGeminiModelCaller.class);
 			Flux<ChatResponse> responseFlux = client.stream(new Prompt(new UserMessage("Hello")));
 			String response = responseFlux.collectList().block().stream().map(chatResponse -> {
 				return chatResponse.getResults().get(0).getOutput().getContent();

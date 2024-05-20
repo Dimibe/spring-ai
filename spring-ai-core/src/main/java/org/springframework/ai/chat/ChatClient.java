@@ -25,10 +25,12 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
+import org.springframework.ai.model.function.FunctionCallingOptions;
 import org.springframework.ai.model.function.FunctionCallingOptionsBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MimeType;
 import org.springframework.util.StringUtils;
 
@@ -49,8 +51,8 @@ import java.util.function.Consumer;
  */
 public interface ChatClient {
 
-	static ChatClientBuilder builder(ModelCall connector) {
-		return new ChatClientBuilder(connector);
+	static ChatClientBuilder builder(ChatCaller caller) {
+		return new ChatClientBuilder(caller);
 	}
 
 	ChatResponse call(Prompt prompt);
@@ -165,13 +167,15 @@ public interface ChatClient {
 
 	class ChatClientRequest {
 
-		private final ModelCall connector;
+		private final ChatCaller caller;
 
 		private String userText = "";
 
 		private String systemText = "";
 
 		private ChatOptions chatOptions;
+
+		private FunctionCallingOptions functionCallingOptions;
 
 		private final List<Media> media = new ArrayList<>();
 
@@ -187,15 +191,15 @@ public interface ChatClient {
 
 		/* copy constructor */
 		ChatClientRequest(ChatClientRequest ccr) {
-			this(ccr.connector, ccr.userText, ccr.systemText, ccr.functionCallbacks, ccr.functionNames, ccr.media,
+			this(ccr.caller, ccr.userText, ccr.systemText, ccr.functionCallbacks, ccr.functionNames, ccr.media,
 					ccr.chatOptions);
 		}
 
-		public ChatClientRequest(ModelCall connector, String userText, String systemText,
+		public ChatClientRequest(ChatCaller caller, String userText, String systemText,
 				List<FunctionCallback> functionCallbacks, List<String> functionNames, List<Media> media,
 				ChatOptions chatOptions) {
 
-			this.connector = connector;
+			this.caller = caller;
 			this.chatOptions = chatOptions;
 
 			this.userText = userText;
@@ -258,9 +262,9 @@ public interface ChatClient {
 
 			private final ChatClientRequest request;
 
-			private final ModelCall modelCall;
+			private final ChatCaller modelCall;
 
-			public ChatResponseSpec(ModelCall modelCall, ChatClientRequest request) {
+			public ChatResponseSpec(ChatCaller modelCall, ChatClientRequest request) {
 				this.modelCall = modelCall;
 				this.request = request;
 			}
@@ -272,8 +276,8 @@ public interface ChatClient {
 
 			private <T> T doSingleWithBeanOutputConverter(BeanOutputConverter<T> boc) {
 				var processedUserText = this.request.userText + System.lineSeparator() + System.lineSeparator()
-						+ boc.getFormat();
-				var chatResponse = doGetChatResponse(processedUserText);
+						+ "{format}";
+				var chatResponse = doGetChatResponse(processedUserText, boc.getFormat());
 				var stringResponse = chatResponse.getResult().getOutput().getContent();
 				return boc.convert(stringResponse);
 			}
@@ -285,6 +289,15 @@ public interface ChatClient {
 			}
 
 			private ChatResponse doGetChatResponse(String processedUserText) {
+				return this.doGetChatResponse(processedUserText, "");
+			}
+
+			private ChatResponse doGetChatResponse(String processedUserText, String formatParam) {
+				Map<String, Object> userParams = new HashMap<>(this.request.userParams);
+				if (StringUtils.hasText(formatParam)) {
+					userParams.put("format", formatParam);
+				}
+
 				var messages = new ArrayList<Message>();
 				var textsAreValid = (StringUtils.hasText(processedUserText)
 						|| StringUtils.hasText(this.request.systemText));
@@ -292,18 +305,28 @@ public interface ChatClient {
 				Assert.state(!(messagesAreValid && textsAreValid), "you must specify either " + Message.class.getName()
 						+ " instances or user/system texts, but not both");
 				if (textsAreValid) {
-					var userMessage = new UserMessage(
-							new PromptTemplate(processedUserText, this.request.userParams).render(),
-							this.request.media);
-					var systemMessage = new SystemMessage(
-							new PromptTemplate(this.request.systemText, this.request.systemParams).render());
-					messages.add(systemMessage);
+					UserMessage userMessage = null;
+					if (!CollectionUtils.isEmpty(userParams)) {
+						userMessage = new UserMessage(new PromptTemplate(processedUserText, userParams).render(),
+								this.request.media);
+					}
+					else {
+						userMessage = new UserMessage(processedUserText, this.request.media);
+					}
+					if (StringUtils.hasText(this.request.systemText) || !this.request.systemParams.isEmpty()) {
+						var systemMessage = new SystemMessage(
+								new PromptTemplate(this.request.systemText, this.request.systemParams).render());
+						messages.add(systemMessage);
+					}
 					messages.add(userMessage);
 				}
 				else {
 					messages.addAll(this.request.messages);
 				}
-				if (this.request.chatOptions instanceof FunctionCallingOptionsBuilder.PortableFunctionCallingOptions functionCallingOptions) {
+				if (this.request.chatOptions instanceof FunctionCallingOptions functionCallingOptions) {
+					// if (this.request.chatOptions instanceof
+					// FunctionCallingOptionsBuilder.PortableFunctionCallingOptions
+					// functionCallingOptions) {
 					if (!this.request.functionNames.isEmpty()) {
 						functionCallingOptions.setFunctions(new HashSet<>(this.request.functionNames));
 					}
@@ -336,7 +359,7 @@ public interface ChatClient {
 		}
 
 		public ChatResponseSpec chat() {
-			return new ChatResponseSpec(this.connector, this);
+			return new ChatResponseSpec(this.caller, this);
 		}
 
 	}
@@ -345,10 +368,10 @@ public interface ChatClient {
 
 		private final ChatClientRequest defaultRequest;
 
-		private final ModelCall modelCall;
+		private final ChatCaller modelCall;
 
-		ChatClientBuilder(ModelCall modelCall) {
-			Assert.notNull(modelCall, "the " + ModelCall.class.getName() + " must be non-null");
+		ChatClientBuilder(ChatCaller modelCall) {
+			Assert.notNull(modelCall, "the " + ChatCaller.class.getName() + " must be non-null");
 			this.modelCall = modelCall;
 			this.defaultRequest = new ChatClientRequest(modelCall, "", "", List.of(), List.of(), List.of(), null);
 		}

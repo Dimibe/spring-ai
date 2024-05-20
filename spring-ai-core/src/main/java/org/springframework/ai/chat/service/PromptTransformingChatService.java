@@ -15,7 +15,7 @@
  */
 package org.springframework.ai.chat.service;
 
-import org.springframework.ai.chat.ModelCall;
+import org.springframework.ai.chat.ChatCaller;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.transformer.ChatServiceContext;
 import org.springframework.ai.chat.prompt.transformer.PromptTransformer;
@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 public class PromptTransformingChatService implements ChatService {
 
-	private ModelCall modelCall;
+	private ChatCaller modelCall;
 
 	private List<PromptTransformer> retrievers;
 
@@ -45,7 +45,7 @@ public class PromptTransformingChatService implements ChatService {
 
 	private List<ChatServiceListener> chatServiceListeners;
 
-	public PromptTransformingChatService(ModelCall modelCall, List<PromptTransformer> retrievers,
+	public PromptTransformingChatService(ChatCaller modelCall, List<PromptTransformer> retrievers,
 			List<PromptTransformer> documentPostProcessors, List<PromptTransformer> augmentors,
 			List<ChatServiceListener> chatServiceListeners) {
 		Objects.requireNonNull(modelCall, "modelCall must not be null");
@@ -56,7 +56,7 @@ public class PromptTransformingChatService implements ChatService {
 		this.chatServiceListeners = chatServiceListeners;
 	}
 
-	public static Builder builder(ModelCall modelCall) {
+	public static Builder builder(ChatCaller modelCall) {
 		return new Builder().withChatClient(modelCall);
 	}
 
@@ -98,7 +98,7 @@ public class PromptTransformingChatService implements ChatService {
 
 	public static class Builder {
 
-		private ModelCall modelCall;
+		private ChatCaller modelCall;
 
 		private List<PromptTransformer> retrievers = new ArrayList<>();
 
@@ -108,7 +108,7 @@ public class PromptTransformingChatService implements ChatService {
 
 		private List<ChatServiceListener> chatServiceListeners = new ArrayList<>();
 
-		public Builder withChatClient(ModelCall modelCall) {
+		public Builder withChatClient(ChatCaller modelCall) {
 			this.modelCall = modelCall;
 			return this;
 		}

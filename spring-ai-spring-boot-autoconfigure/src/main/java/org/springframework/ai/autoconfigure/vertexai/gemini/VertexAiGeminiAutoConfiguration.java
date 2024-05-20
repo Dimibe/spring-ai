@@ -24,7 +24,7 @@ import com.google.cloud.vertexai.VertexAI;
 import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.ai.model.function.FunctionCallbackWrapper.Builder.SchemaType;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCall;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCaller;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -40,7 +40,7 @@ import org.springframework.util.StringUtils;
  * @author Christian Tzolov
  * @since 0.8.0
  */
-@ConditionalOnClass({ VertexAI.class, VertexAiGeminiModelCall.class })
+@ConditionalOnClass({ VertexAI.class, VertexAiGeminiModelCaller.class })
 @EnableConfigurationProperties({ VertexAiGeminiChatProperties.class, VertexAiGeminiConnectionProperties.class })
 public class VertexAiGeminiAutoConfiguration {
 
@@ -74,7 +74,7 @@ public class VertexAiGeminiAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public VertexAiGeminiModelCall vertexAiGeminiChat(VertexAI vertexAi, VertexAiGeminiChatProperties chatProperties,
+	public VertexAiGeminiModelCaller vertexAiGeminiChat(VertexAI vertexAi, VertexAiGeminiChatProperties chatProperties,
 			List<FunctionCallback> toolFunctionCallbacks, ApplicationContext context) {
 
 		FunctionCallbackContext functionCallbackContext = springAiFunctionManager(context);
@@ -83,7 +83,7 @@ public class VertexAiGeminiAutoConfiguration {
 			chatProperties.getOptions().getFunctionCallbacks().addAll(toolFunctionCallbacks);
 		}
 
-		return new VertexAiGeminiModelCall(vertexAi, chatProperties.getOptions(), functionCallbackContext);
+		return new VertexAiGeminiModelCaller(vertexAi, chatProperties.getOptions(), functionCallbackContext);
 	}
 
 	/**

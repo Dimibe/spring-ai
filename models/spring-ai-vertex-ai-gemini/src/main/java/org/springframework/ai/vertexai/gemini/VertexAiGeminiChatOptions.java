@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallingOptions;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCall.ChatModel;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCaller.ChatModel;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.Assert;
 

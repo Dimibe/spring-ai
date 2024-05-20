@@ -35,7 +35,7 @@ import reactor.core.publisher.Flux;
 import org.springframework.ai.autoconfigure.retry.SpringAiRetryAutoConfiguration;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.embedding.EmbeddingResponse;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -55,7 +55,7 @@ public class OpenAiAutoConfigurationIT {
 	@Test
 	void generate() {
 		contextRunner.run(context -> {
-			OpenAiModelCall client = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller client = context.getBean(OpenAiModelCaller.class);
 			String response = client.call("Hello");
 			assertThat(response).isNotEmpty();
 			logger.info("Response: " + response);
@@ -102,7 +102,7 @@ public class OpenAiAutoConfigurationIT {
 	@Test
 	void generateStreaming() {
 		contextRunner.run(context -> {
-			OpenAiModelCall client = context.getBean(OpenAiModelCall.class);
+			OpenAiModelCaller client = context.getBean(OpenAiModelCaller.class);
 			Flux<ChatResponse> responseFlux = client.stream(new Prompt(new UserMessage("Hello")));
 			String response = responseFlux.collectList().block().stream().map(chatResponse -> {
 				return chatResponse.getResults().get(0).getOutput().getContent();

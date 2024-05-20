@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.springframework.ai.azure.openai.AzureOpenAiModelCall;
+import org.springframework.ai.azure.openai.AzureOpenAiModelCaller;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import reactor.core.publisher.Flux;
 
@@ -77,7 +77,7 @@ public class AzureOpenAiAutoConfigurationIT {
 	@Test
 	public void chatCompletion() {
 		contextRunner.run(context -> {
-			AzureOpenAiModelCall chatClient = context.getBean(AzureOpenAiModelCall.class);
+			AzureOpenAiModelCaller chatClient = context.getBean(AzureOpenAiModelCaller.class);
 			ChatResponse response = chatClient.call(new Prompt(List.of(userMessage, systemMessage)));
 			assertThat(response.getResult().getOutput().getContent()).contains("Blackbeard");
 		});
@@ -87,7 +87,7 @@ public class AzureOpenAiAutoConfigurationIT {
 	public void chatCompletionStreaming() {
 		contextRunner.run(context -> {
 
-			AzureOpenAiModelCall chatClient = context.getBean(AzureOpenAiModelCall.class);
+			AzureOpenAiModelCaller chatClient = context.getBean(AzureOpenAiModelCaller.class);
 
 			Flux<ChatResponse> response = chatClient.stream(new Prompt(List.of(userMessage, systemMessage)));
 
@@ -127,17 +127,17 @@ public class AzureOpenAiAutoConfigurationIT {
 
 		// Disable the chat auto-configuration.
 		contextRunner.withPropertyValues("spring.ai.azure.openai.chat.enabled=false").run(context -> {
-			assertThat(context.getBeansOfType(AzureOpenAiModelCall.class)).isEmpty();
+			assertThat(context.getBeansOfType(AzureOpenAiModelCaller.class)).isEmpty();
 		});
 
 		// The chat auto-configuration is enabled by default.
 		contextRunner.run(context -> {
-			assertThat(context.getBeansOfType(AzureOpenAiModelCall.class)).isNotEmpty();
+			assertThat(context.getBeansOfType(AzureOpenAiModelCaller.class)).isNotEmpty();
 		});
 
 		// Explicitly enable the chat auto-configuration.
 		contextRunner.withPropertyValues("spring.ai.azure.openai.chat.enabled=true").run(context -> {
-			assertThat(context.getBeansOfType(AzureOpenAiModelCall.class)).isNotEmpty();
+			assertThat(context.getBeansOfType(AzureOpenAiModelCaller.class)).isNotEmpty();
 		});
 	}
 

@@ -15,7 +15,7 @@
  */
 package org.springframework.ai.autoconfigure.vertexai.palm2;
 
-import org.springframework.ai.vertexai.palm2.VertexAiPaLm2ModelCall;
+import org.springframework.ai.vertexai.palm2.VertexAiPaLm2ModelCaller;
 import org.springframework.ai.vertexai.palm2.VertexAiPaLm2EmbeddingClient;
 import org.springframework.ai.vertexai.palm2.api.VertexAiPaLm2Api;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -47,9 +47,9 @@ public class VertexAiPalm2AutoConfiguration {
 	@ConditionalOnMissingBean
 	@ConditionalOnProperty(prefix = VertexAiPlam2ChatProperties.CONFIG_PREFIX, name = "enabled", havingValue = "true",
 			matchIfMissing = true)
-	public VertexAiPaLm2ModelCall vertexAiChatClient(VertexAiPaLm2Api vertexAiApi,
+	public VertexAiPaLm2ModelCaller vertexAiChatClient(VertexAiPaLm2Api vertexAiApi,
 			VertexAiPlam2ChatProperties chatProperties) {
-		return new VertexAiPaLm2ModelCall(vertexAiApi, chatProperties.getOptions());
+		return new VertexAiPaLm2ModelCaller(vertexAiApi, chatProperties.getOptions());
 	}
 
 	@Bean

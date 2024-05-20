@@ -45,7 +45,7 @@ public class BedrockLlamaCreateRequestTests {
 	@Test
 	public void createRequestWithChatOptions() {
 
-		var client = new BedrockLlamaModelCall(api,
+		var client = new BedrockLlamaModelCaller(api,
 				BedrockLlamaChatOptions.builder().withTemperature(66.6f).withMaxGenLen(666).withTopP(0.66f).build());
 
 		var request = client.createRequest(new Prompt("Test message content"));

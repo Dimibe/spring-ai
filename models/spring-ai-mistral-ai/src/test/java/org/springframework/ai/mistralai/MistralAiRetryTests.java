@@ -82,7 +82,7 @@ public class MistralAiRetryTests {
 
 	private @Mock MistralAiApi mistralAiApi;
 
-	private MistralAiModelCall chatClient;
+	private MistralAiModelCaller chatClient;
 
 	private MistralAiEmbeddingClient embeddingClient;
 
@@ -92,7 +92,7 @@ public class MistralAiRetryTests {
 		retryListener = new TestRetryListener();
 		retryTemplate.registerListener(retryListener);
 
-		chatClient = new MistralAiModelCall(mistralAiApi,
+		chatClient = new MistralAiModelCaller(mistralAiApi,
 				MistralAiChatOptions.builder()
 					.withTemperature(0.7f)
 					.withTopP(1f)

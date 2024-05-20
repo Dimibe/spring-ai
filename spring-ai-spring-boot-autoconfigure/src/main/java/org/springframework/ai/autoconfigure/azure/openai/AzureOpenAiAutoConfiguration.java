@@ -22,7 +22,7 @@ import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.util.ClientOptions;
 
-import org.springframework.ai.azure.openai.AzureOpenAiModelCall;
+import org.springframework.ai.azure.openai.AzureOpenAiModelCaller;
 import org.springframework.ai.azure.openai.AzureOpenAiEmbeddingClient;
 import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallbackContext;
@@ -37,7 +37,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 @AutoConfiguration
-@ConditionalOnClass({ OpenAIClientBuilder.class, AzureOpenAiModelCall.class })
+@ConditionalOnClass({ OpenAIClientBuilder.class, AzureOpenAiModelCaller.class })
 @EnableConfigurationProperties({ AzureOpenAiChatProperties.class, AzureOpenAiEmbeddingProperties.class,
 		AzureOpenAiConnectionProperties.class })
 public class AzureOpenAiAutoConfiguration {
@@ -58,7 +58,7 @@ public class AzureOpenAiAutoConfiguration {
 	@Bean
 	@ConditionalOnProperty(prefix = AzureOpenAiChatProperties.CONFIG_PREFIX, name = "enabled", havingValue = "true",
 			matchIfMissing = true)
-	public AzureOpenAiModelCall azureOpenAiChatClient(OpenAIClient openAIClient,
+	public AzureOpenAiModelCaller azureOpenAiChatClient(OpenAIClient openAIClient,
 			AzureOpenAiChatProperties chatProperties, List<FunctionCallback> toolFunctionCallbacks,
 			FunctionCallbackContext functionCallbackContext) {
 
@@ -66,8 +66,8 @@ public class AzureOpenAiAutoConfiguration {
 			chatProperties.getOptions().getFunctionCallbacks().addAll(toolFunctionCallbacks);
 		}
 
-		AzureOpenAiModelCall azureOpenAiChatClient = new AzureOpenAiModelCall(openAIClient, chatProperties.getOptions(),
-				functionCallbackContext);
+		AzureOpenAiModelCaller azureOpenAiChatClient = new AzureOpenAiModelCaller(openAIClient,
+				chatProperties.getOptions(), functionCallbackContext);
 
 		return azureOpenAiChatClient;
 	}

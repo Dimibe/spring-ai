@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCall;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiModelCaller;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.chat.ChatResponse;
@@ -55,7 +55,7 @@ public class VertexAiGeminiModelCallFunctionCallingIT {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private VertexAiGeminiModelCall vertexGeminiClient;
+	private VertexAiGeminiModelCaller vertexGeminiClient;
 
 	@AfterEach
 	public void afterEach() {
@@ -98,7 +98,7 @@ public class VertexAiGeminiModelCallFunctionCallingIT {
 					""";
 
 		var promptOptions = VertexAiGeminiChatOptions.builder()
-			.withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO)
+			.withModel(VertexAiGeminiModelCaller.ChatModel.GEMINI_PRO)
 			// .withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO_1_5_PRO)
 			.withFunctionCallbacks(List.of(FunctionCallbackWrapper.builder(new MockWeatherService())
 				.withName("get_current_weather")
@@ -127,7 +127,7 @@ public class VertexAiGeminiModelCallFunctionCallingIT {
 
 		var promptOptions = VertexAiGeminiChatOptions.builder()
 			// .withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO_1_5_PRO)
-			.withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO.getValue())
+			.withModel(VertexAiGeminiModelCaller.ChatModel.GEMINI_PRO.getValue())
 			.withFunctionCallbacks(List.of(
 					FunctionCallbackWrapper.builder(new MockWeatherService())
 						.withSchemaType(SchemaType.OPEN_API_SCHEMA)
@@ -168,7 +168,7 @@ public class VertexAiGeminiModelCallFunctionCallingIT {
 		List<Message> messages = new ArrayList<>(List.of(userMessage));
 
 		var promptOptions = VertexAiGeminiChatOptions.builder()
-			.withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO)
+			.withModel(VertexAiGeminiModelCaller.ChatModel.GEMINI_PRO)
 			.withFunctionCallbacks(List.of(FunctionCallbackWrapper.builder(new MockWeatherService())
 				.withSchemaType(SchemaType.OPEN_API_SCHEMA)
 				.withName("getCurrentWeather")
@@ -224,10 +224,10 @@ public class VertexAiGeminiModelCallFunctionCallingIT {
 		}
 
 		@Bean
-		public VertexAiGeminiModelCall vertexAiEmbedding(VertexAI vertexAi) {
-			return new VertexAiGeminiModelCall(vertexAi,
+		public VertexAiGeminiModelCaller vertexAiEmbedding(VertexAI vertexAi) {
+			return new VertexAiGeminiModelCaller(vertexAi,
 					VertexAiGeminiChatOptions.builder()
-						.withModel(VertexAiGeminiModelCall.ChatModel.GEMINI_PRO)
+						.withModel(VertexAiGeminiModelCaller.ChatModel.GEMINI_PRO)
 						.withTemperature(0.9f)
 						.build());
 		}

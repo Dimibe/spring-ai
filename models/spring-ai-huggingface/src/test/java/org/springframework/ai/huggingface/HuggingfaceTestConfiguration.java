@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
 public class HuggingfaceTestConfiguration {
 
 	@Bean
-	public HuggingfaceModelCall huggingfaceChatClient() {
+	public HuggingfaceModelCaller huggingfaceChatClient() {
 		String apiKey = System.getenv("HUGGINGFACE_API_KEY");
 		if (!StringUtils.hasText(apiKey)) {
 			throw new IllegalArgumentException(
@@ -31,7 +31,7 @@ public class HuggingfaceTestConfiguration {
 		}
 		// Created aws-mistral-7b-instruct-v0-1-805 via
 		// https://ui.endpoints.huggingface.co/
-		HuggingfaceModelCall huggingfaceChatClient = new HuggingfaceModelCall(apiKey,
+		HuggingfaceModelCaller huggingfaceChatClient = new HuggingfaceModelCaller(apiKey,
 				"https://f6hg7b3cvlmntp5i.us-east-1.aws.endpoints.huggingface.cloud");
 		return huggingfaceChatClient;
 	}

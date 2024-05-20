@@ -27,7 +27,7 @@ import reactor.core.publisher.Flux;
 import software.amazon.awssdk.regions.Region;
 
 import org.springframework.ai.autoconfigure.bedrock.BedrockAwsConnectionProperties;
-import org.springframework.ai.bedrock.titan.BedrockTitanModelCall;
+import org.springframework.ai.bedrock.titan.BedrockTitanModelCaller;
 import org.springframework.ai.bedrock.titan.api.TitanChatBedrockApi.TitanChatModel;
 import org.springframework.ai.chat.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -70,7 +70,7 @@ public class BedrockTitanChatAutoConfigurationIT {
 	@Test
 	public void chatCompletion() {
 		contextRunner.run(context -> {
-			BedrockTitanModelCall chatClient = context.getBean(BedrockTitanModelCall.class);
+			BedrockTitanModelCaller chatClient = context.getBean(BedrockTitanModelCaller.class);
 			ChatResponse response = chatClient.call(new Prompt(List.of(userMessage, systemMessage)));
 			assertThat(response.getResult().getOutput().getContent()).contains("Blackbeard");
 		});
@@ -80,7 +80,7 @@ public class BedrockTitanChatAutoConfigurationIT {
 	public void chatCompletionStreaming() {
 		contextRunner.run(context -> {
 
-			BedrockTitanModelCall chatClient = context.getBean(BedrockTitanModelCall.class);
+			BedrockTitanModelCaller chatClient = context.getBean(BedrockTitanModelCaller.class);
 
 			Flux<ChatResponse> response = chatClient.stream(new Prompt(List.of(userMessage, systemMessage)));
 
@@ -137,7 +137,7 @@ public class BedrockTitanChatAutoConfigurationIT {
 		new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(BedrockTitanChatAutoConfiguration.class))
 			.run(context -> {
 				assertThat(context.getBeansOfType(BedrockTitanChatProperties.class)).isEmpty();
-				assertThat(context.getBeansOfType(BedrockTitanModelCall.class)).isEmpty();
+				assertThat(context.getBeansOfType(BedrockTitanModelCaller.class)).isEmpty();
 			});
 
 		// Explicitly enable the chat auto-configuration.
@@ -145,7 +145,7 @@ public class BedrockTitanChatAutoConfigurationIT {
 			.withConfiguration(AutoConfigurations.of(BedrockTitanChatAutoConfiguration.class))
 			.run(context -> {
 				assertThat(context.getBeansOfType(BedrockTitanChatProperties.class)).isNotEmpty();
-				assertThat(context.getBeansOfType(BedrockTitanModelCall.class)).isNotEmpty();
+				assertThat(context.getBeansOfType(BedrockTitanModelCaller.class)).isNotEmpty();
 			});
 
 		// Explicitly disable the chat auto-configuration.
@@ -153,7 +153,7 @@ public class BedrockTitanChatAutoConfigurationIT {
 			.withConfiguration(AutoConfigurations.of(BedrockTitanChatAutoConfiguration.class))
 			.run(context -> {
 				assertThat(context.getBeansOfType(BedrockTitanChatProperties.class)).isEmpty();
-				assertThat(context.getBeansOfType(BedrockTitanModelCall.class)).isEmpty();
+				assertThat(context.getBeansOfType(BedrockTitanModelCaller.class)).isEmpty();
 			});
 	}
 

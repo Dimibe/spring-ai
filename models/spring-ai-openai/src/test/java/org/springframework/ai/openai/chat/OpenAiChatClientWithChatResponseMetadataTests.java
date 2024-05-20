@@ -27,7 +27,7 @@ import org.springframework.ai.chat.metadata.PromptMetadata;
 import org.springframework.ai.chat.metadata.RateLimit;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import org.springframework.ai.openai.metadata.support.OpenAiApiResponseHeaders;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class OpenAiChatClientWithChatResponseMetadataTests {
 	private static String TEST_API_KEY = "sk-1234567890";
 
 	@Autowired
-	private OpenAiModelCall openAiChatClient;
+	private OpenAiModelCaller openAiChatClient;
 
 	@Autowired
 	private MockRestServiceServer server;
@@ -171,8 +171,8 @@ public class OpenAiChatClientWithChatResponseMetadataTests {
 		}
 
 		@Bean
-		public OpenAiModelCall openAiClient(OpenAiApi openAiApi) {
-			return new OpenAiModelCall(openAiApi);
+		public OpenAiModelCaller openAiClient(OpenAiApi openAiApi) {
+			return new OpenAiModelCaller(openAiApi);
 		}
 
 	}

@@ -41,7 +41,7 @@ public class BedrockTitanChatCreateRequestTests {
 	@Test
 	public void createRequestWithChatOptions() {
 
-		var client = new BedrockTitanModelCall(api,
+		var client = new BedrockTitanModelCaller(api,
 				BedrockTitanChatOptions.builder()
 					.withTemperature(66.6f)
 					.withTopP(0.66f)

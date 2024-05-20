@@ -19,7 +19,7 @@ package org.springframework.ai.autoconfigure.bedrock.jurrasic2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.autoconfigure.bedrock.BedrockAwsConnectionConfiguration;
 import org.springframework.ai.autoconfigure.bedrock.BedrockAwsConnectionProperties;
-import org.springframework.ai.bedrock.jurassic2.BedrockAi21Jurassic2ModelCall;
+import org.springframework.ai.bedrock.jurassic2.BedrockAi21Jurassic2ModelCaller;
 import org.springframework.ai.bedrock.jurassic2.api.Ai21Jurassic2ChatBedrockApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -59,10 +59,10 @@ public class BedrockAi21Jurassic2ChatAutoConfiguration {
 
 	@Bean
 	@ConditionalOnBean(Ai21Jurassic2ChatBedrockApi.class)
-	public BedrockAi21Jurassic2ModelCall jurassic2ChatClient(Ai21Jurassic2ChatBedrockApi ai21Jurassic2ChatBedrockApi,
+	public BedrockAi21Jurassic2ModelCaller jurassic2ChatClient(Ai21Jurassic2ChatBedrockApi ai21Jurassic2ChatBedrockApi,
 			BedrockAi21Jurassic2ChatProperties properties) {
 
-		return BedrockAi21Jurassic2ModelCall.builder(ai21Jurassic2ChatBedrockApi)
+		return BedrockAi21Jurassic2ModelCaller.builder(ai21Jurassic2ChatBedrockApi)
 			.withOptions(properties.getOptions())
 			.build();
 	}

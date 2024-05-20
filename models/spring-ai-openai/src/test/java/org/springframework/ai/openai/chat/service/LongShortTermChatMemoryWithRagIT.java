@@ -30,7 +30,7 @@ import org.springframework.ai.chat.prompt.transformer.ChatServiceContext;
 import org.springframework.ai.chat.service.ChatService;
 import org.springframework.ai.chat.service.PromptTransformingChatService;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.qdrant.QdrantContainer;
@@ -163,8 +163,8 @@ public class LongShortTermChatMemoryWithRagIT {
 		}
 
 		@Bean
-		public OpenAiModelCall openAiClient(OpenAiApi openAiApi) {
-			return new OpenAiModelCall(openAiApi);
+		public OpenAiModelCaller openAiClient(OpenAiApi openAiApi) {
+			return new OpenAiModelCaller(openAiApi);
 		}
 
 		@Bean
@@ -186,7 +186,7 @@ public class LongShortTermChatMemoryWithRagIT {
 		}
 
 		@Bean
-		public ChatService memoryChatService(OpenAiModelCall chatClient, VectorStore vectorStore,
+		public ChatService memoryChatService(OpenAiModelCaller chatClient, VectorStore vectorStore,
 				TokenCountEstimator tokenCountEstimator, ChatMemory chatHistory) {
 
 			return PromptTransformingChatService.builder(chatClient)
@@ -240,7 +240,7 @@ public class LongShortTermChatMemoryWithRagIT {
 		// }
 
 		@Bean
-		public RelevancyEvaluator relevancyEvaluator(OpenAiModelCall chatClient) {
+		public RelevancyEvaluator relevancyEvaluator(OpenAiModelCaller chatClient) {
 			// Use GPT 4 as a better model for determining relevancy. gpt 3.5 makes basic
 			// mistakes
 			OpenAiChatOptions openAiChatOptions = OpenAiChatOptions.builder()

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.ai.anthropic.AnthropicModelCall;
+import org.springframework.ai.anthropic.AnthropicModelCaller;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.api.AnthropicApi;
 import org.springframework.ai.autoconfigure.anthropic.AnthropicAutoConfiguration;
@@ -61,7 +61,7 @@ class FunctionCallWithFunctionBeanIT {
 					"spring.ai.anthropic.chat.options.model=" + AnthropicApi.ChatModel.CLAUDE_3_OPUS.getValue())
 			.run(context -> {
 
-				AnthropicModelCall chatClient = context.getBean(AnthropicModelCall.class);
+				AnthropicModelCaller chatClient = context.getBean(AnthropicModelCaller.class);
 
 				var userMessage = new UserMessage(
 						"What's the weather like in San Francisco, in Paris, France and in Tokyo, Japan? Return the temperature in Celsius.");

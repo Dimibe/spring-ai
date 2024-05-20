@@ -18,7 +18,7 @@ package org.springframework.ai.autoconfigure.bedrock.anthropic;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.autoconfigure.bedrock.BedrockAwsConnectionConfiguration;
 import org.springframework.ai.autoconfigure.bedrock.BedrockAwsConnectionProperties;
-import org.springframework.ai.bedrock.anthropic.BedrockAnthropicModelCall;
+import org.springframework.ai.bedrock.anthropic.BedrockAnthropicModelCaller;
 import org.springframework.ai.bedrock.anthropic.api.AnthropicChatBedrockApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -59,9 +59,9 @@ public class BedrockAnthropicChatAutoConfiguration {
 
 	@Bean
 	@ConditionalOnBean(AnthropicChatBedrockApi.class)
-	public BedrockAnthropicModelCall anthropicChatClient(AnthropicChatBedrockApi anthropicApi,
+	public BedrockAnthropicModelCaller anthropicChatClient(AnthropicChatBedrockApi anthropicApi,
 			BedrockAnthropicChatProperties properties) {
-		return new BedrockAnthropicModelCall(anthropicApi, properties.getOptions());
+		return new BedrockAnthropicModelCaller(anthropicApi, properties.getOptions());
 	}
 
 }

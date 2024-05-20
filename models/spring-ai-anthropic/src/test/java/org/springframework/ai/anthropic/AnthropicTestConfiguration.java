@@ -38,8 +38,8 @@ public class AnthropicTestConfiguration {
 	}
 
 	@Bean
-	public AnthropicModelCall openAiChatClient(AnthropicApi api) {
-		AnthropicModelCall anthropicChatClient = new AnthropicModelCall(api);
+	public AnthropicModelCaller openAiChatClient(AnthropicApi api) {
+		AnthropicModelCaller anthropicChatClient = new AnthropicModelCaller(api);
 		return anthropicChatClient;
 	}
 

@@ -23,7 +23,7 @@ import io.qdrant.client.QdrantClient;
 import io.qdrant.client.QdrantGrpcClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.springframework.ai.chat.ModelCall;
+import org.springframework.ai.chat.ChatCaller;
 import org.springframework.ai.chat.service.ChatService;
 import org.springframework.ai.chat.prompt.transformer.TransformerContentType;
 import org.springframework.ai.document.Document;
@@ -41,7 +41,7 @@ import org.springframework.ai.chat.prompt.transformer.VectorStoreRetriever;
 import org.springframework.ai.embedding.EmbeddingClient;
 import org.springframework.ai.evaluation.EvaluationResponse;
 import org.springframework.ai.evaluation.RelevancyEvaluator;
-import org.springframework.ai.openai.OpenAiModelCall;
+import org.springframework.ai.openai.OpenAiModelCaller;
 import org.springframework.ai.openai.OpenAiEmbeddingClient;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.reader.JsonReader;
@@ -71,7 +71,7 @@ public class OpenAiPromptTransformingChatServiceIT {
 	@Container
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:v1.9.2");
 
-	private final ModelCall modelCall;
+	private final ChatCaller modelCall;
 
 	private final VectorStore vectorStore;
 
@@ -81,7 +81,7 @@ public class OpenAiPromptTransformingChatServiceIT {
 	private ChatService chatService;
 
 	@Autowired
-	public OpenAiPromptTransformingChatServiceIT(ModelCall modelCall, ChatService chatService,
+	public OpenAiPromptTransformingChatServiceIT(ChatCaller modelCall, ChatService chatService,
 			VectorStore vectorStore) {
 		this.modelCall = modelCall;
 		this.chatService = chatService;
@@ -145,8 +145,8 @@ public class OpenAiPromptTransformingChatServiceIT {
 		}
 
 		@Bean
-		public ModelCall openAiClient(OpenAiApi openAiApi) {
-			return new OpenAiModelCall(openAiApi);
+		public ChatCaller openAiClient(OpenAiApi openAiApi) {
+			return new OpenAiModelCaller(openAiApi);
 		}
 
 		@Bean
@@ -163,7 +163,7 @@ public class OpenAiPromptTransformingChatServiceIT {
 		}
 
 		@Bean
-		public ChatService chatService(ModelCall modelCall, VectorStore vectorStore) {
+		public ChatService chatService(ChatCaller modelCall, VectorStore vectorStore) {
 			return PromptTransformingChatService.builder(modelCall)
 				.withRetrievers(List.of(new VectorStoreRetriever(vectorStore, SearchRequest.defaults())))
 				.withAugmentors(List.of(new QuestionContextAugmentor()))

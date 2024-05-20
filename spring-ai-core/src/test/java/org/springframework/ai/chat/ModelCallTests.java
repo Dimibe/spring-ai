@@ -34,7 +34,7 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 
 /**
- * Unit Tests for {@link ModelCall}.
+ * Unit Tests for {@link ChatCaller}.
  *
  * @author John Blum
  * @since 0.2.0
@@ -47,7 +47,7 @@ class ModelCallTests {
 		String userMessage = "Zero Wing";
 		String responseMessage = "All your bases are belong to us";
 
-		ModelCall mockClient = Mockito.mock(ModelCall.class);
+		ChatCaller mockClient = Mockito.mock(ChatCaller.class);
 
 		AssistantMessage mockAssistantMessage = Mockito.mock(AssistantMessage.class);
 		when(mockAssistantMessage.getContent()).thenReturn(responseMessage);

@@ -18,7 +18,7 @@ package org.springframework.ai.transformer;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.ai.chat.ModelCall;
+import org.springframework.ai.chat.ChatCaller;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.document.DocumentTransformer;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -43,14 +43,14 @@ public class KeywordMetadataEnricher implements DocumentTransformer {
 	/**
 	 * Model predictor
 	 */
-	private final ModelCall modelCall;
+	private final ChatCaller modelCall;
 
 	/**
 	 * The number of keywords to extract.
 	 */
 	private final int keywordCount;
 
-	public KeywordMetadataEnricher(ModelCall modelCall, int keywordCount) {
+	public KeywordMetadataEnricher(ChatCaller modelCall, int keywordCount) {
 		Assert.notNull(modelCall, "ModelCall must not be null");
 		Assert.isTrue(keywordCount >= 1, "Document count must be >= 1");
 

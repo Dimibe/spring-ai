@@ -29,7 +29,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.ai.azure.openai.AzureOpenAiModelCall;
+import org.springframework.ai.azure.openai.AzureOpenAiModelCaller;
 import org.springframework.ai.azure.openai.AzureOpenAiChatOptions;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.Generation;
@@ -57,7 +57,7 @@ class AzureOpenAiModelCallFunctionCallIT {
 	private String selectedModel;
 
 	@Autowired
-	private AzureOpenAiModelCall chatClient;
+	private AzureOpenAiModelCaller chatClient;
 
 	@Test
 	void functionCallTest() {
@@ -129,8 +129,8 @@ class AzureOpenAiModelCallFunctionCallIT {
 		}
 
 		@Bean
-		public AzureOpenAiModelCall azureOpenAiChatClient(OpenAIClient openAIClient, String selectedModel) {
-			return new AzureOpenAiModelCall(openAIClient,
+		public AzureOpenAiModelCaller azureOpenAiChatClient(OpenAIClient openAIClient, String selectedModel) {
+			return new AzureOpenAiModelCaller(openAIClient,
 					AzureOpenAiChatOptions.builder().withDeploymentName(selectedModel).withMaxTokens(500).build());
 		}
 

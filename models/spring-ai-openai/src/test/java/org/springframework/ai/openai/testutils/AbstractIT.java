@@ -21,7 +21,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.ai.chat.ModelCall;
+import org.springframework.ai.chat.ChatCaller;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.StreamingChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -43,7 +43,7 @@ public abstract class AbstractIT {
 	private static final Logger logger = LoggerFactory.getLogger(AbstractIT.class);
 
 	@Autowired
-	protected ModelCall modelCall;
+	protected ChatCaller modelCaller;
 
 	@Autowired
 	protected StreamingChatClient streamingChatClient;
@@ -85,12 +85,12 @@ public abstract class AbstractIT {
 		}
 		Message userMessage = userPromptTemplate.createMessage();
 		Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
-		String yesOrNo = modelCall.call(prompt).getResult().getOutput().getContent();
+		String yesOrNo = modelCaller.call(prompt).getResult().getOutput().getContent();
 		logger.info("Is Answer related to question: " + yesOrNo);
 		if (yesOrNo.equalsIgnoreCase("no")) {
 			SystemMessage notRelatedSystemMessage = new SystemMessage(qaEvaluatorNotRelatedResource);
 			prompt = new Prompt(List.of(userMessage, notRelatedSystemMessage));
-			String reasonForFailure = modelCall.call(prompt).getResult().getOutput().getContent();
+			String reasonForFailure = modelCaller.call(prompt).getResult().getOutput().getContent();
 			fail(reasonForFailure);
 		}
 		else {
