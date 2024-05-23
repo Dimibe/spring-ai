@@ -37,6 +37,7 @@ import static org.springframework.ai.vectorstore.filter.Filter.ExpressionType.OR
 
 /**
  * @author Gerrit Meier
+ * @author Dimitrios Begnis
  */
 public class Neo4jVectorFilterExpressionConverterTests {
 
